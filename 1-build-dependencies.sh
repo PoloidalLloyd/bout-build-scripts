@@ -1,16 +1,24 @@
 #!/bin/bash
 
+# SETTINGS
+BOUT_COMMIT="7152948"
+BOUT_DIR=$PWD/../BOUT-$BOUT_COMMIT # Make sure this is the same as in build-bout.sh
+
 # Log outcome
-rm -f dependencies-log.out # Remove if already exists
-exec 3>&1 4>&2 # Trap stdout, stderr etc all at the same time.
+rm -f dependencies-buildlog.out
+exec 3>&1 4>&2
 trap 'exec 2>&4 1>&3' 0 1 2 3
-exec 1>dependencies-log.out 2>&1
+exec 1>dependencies-buildlog.out 2>&1
 
 # exit when any command fails
 set -e
 
+rm -rf $BOUT_DIR # Remove if already exists
+mkdir $BOUT_DIR
+cd $BOUT_DIR
+
 # Build dependencies that BOUT++'s CMake configuration does not handle yet
-rm -f dependencies # Delete if already exists
+rm -rf dependencies # Remove if already exists
 mkdir dependencies
 cd dependencies
 
